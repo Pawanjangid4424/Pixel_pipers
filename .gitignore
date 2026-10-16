@@ -3,7 +3,7 @@
 # --- Secrets ---
 # Frontend settings (put the same values in Vercel → Settings → Environment Variables)
 Frontend/.env
-# Backend login + token (use Hugging Face Secrets when deployed)
+# Backend login + token (use Render environment variables when deployed)
 Backend/PIPE_model/credentials.json
 
 # --- Installed packages / build output (re-created with npm install / npm run build) ---

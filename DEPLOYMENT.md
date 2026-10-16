@@ -43,7 +43,7 @@ That file is in `.gitignore`, so it is never uploaded. Open it; you need its val
 
    | Field | Value |
    |---|---|
-   | Name | `pixel-pipers-api` (this becomes the URL) |
+   | Name | `pixel-pipers` (this becomes the URL) |
    | Language | **Docker** |
    | Branch | `main` |
    | Region | **Singapore** (closest to India) |
@@ -63,7 +63,7 @@ That file is in `.gitignore`, so it is never uploaded. Open it; you need its val
 6. Click **Deploy Web Service**.
 7. Watch the **Logs**. The first build takes about **10–15 minutes** (it installs PyTorch). When you see
    `Listening at: http://0.0.0.0:10000` and the status turns **Live**, the backend is running.
-8. Copy your URL from the top of the page, e.g. `https://pixel-pipers-api.onrender.com`.
+8. Copy your URL from the top of the page, `https://pixel-pipers.onrender.com`.
    Test it by opening **`<your URL>/api-doc`**. You should see the API documentation page.
 
 > Render may ask for card details for the free plan. It is free and does not charge you,
@@ -83,7 +83,7 @@ That file is in `.gitignore`, so it is never uploaded. Open it; you need its val
 
      | Key | Value |
      |---|---|
-     | `VITE_SERVER_URL` | your Render URL, e.g. `https://pixel-pipers-api.onrender.com` (no `/` at the end) |
+     | `VITE_SERVER_URL` | your Render URL, `https://pixel-pipers.onrender.com` (no `/` at the end) |
      | `VITE_ML_TOKEN` | value of API_TOKEN from `DEPLOY_SECRETS.txt` |
 
 4. Click **Deploy**. After about 1 minute you get your link, e.g. `https://pixel-pipers.vercel.app`.

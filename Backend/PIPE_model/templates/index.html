@@ -22,7 +22,7 @@
       <h2>Base URL</h2>
       <p>The base URL for all API requests is:</p>
       <code id="baseUrl"
-        >https://darkneuxmodel.westindia.azurecontainer.io</code
+        >https://pixel-pipers.onrender.com</code
       >
       <div>
         <h2>Endpoints</h2>
@@ -72,12 +72,13 @@
         <h2>Response</h2>
         <p>Returns a JSON object with the following properties:</p>
         <p><code>count</code> : The total number of Pipes in the image.</p>
-        <p><code>image_url</code> : Result Image Url cloudinary image url</p>
+        <p><code>image_url</code> : URL of the result image (Cloudinary URL, or an inline
+          <code>data:image/jpeg;base64,...</code> image that can be used directly in <code>&lt;img src&gt;</code>)</p>
         <h1>Example :</h1>
         <h3>Request :</h3>
         <div class="request-snippet">
           <p id="frontendUrl">
-            https://darkneuxmodel.westindia.azurecontainer.io/frontend
+            https://pixel-pipers.onrender.com/frontend
           </p>
           <button class="copy-button" onclick="copyUrl('frontendUrl')">
             Copy
@@ -116,22 +117,17 @@
           </a>
           : 0.1 to 0.9 can be set but 0.6 is ideal
         </p>
-        <p>
-          <a href="#key">
-            <code> key </code>
-          </a>
-          : 1 for numbers or 0 for dots
-        </p>
 
         <h2>Response</h2>
         <p>Returns a JSON object with the following properties:</p>
         <p><code>count</code> : The total number of Pipes in the image.</p>
-        <p><code>image_url</code> : Result Image Url cloudinary image url</p>
+        <p><code>coordinates</code> : one string per pipe in YOLO format:
+          <code>class x_center y_center width height</code> (all values 0 to 1, relative to the image size)</p>
         <h2>Example</h2>
         <h3>Request :</h3>
         <div class="request-snippet">
           <p id="coordinatesUrl">
-            http://darkneuxmodel.westindia.azurecontainer.io/coordinates
+            https://pixel-pipers.onrender.com/coordinates
           </p>
           <button class="copy-button" onclick="copyUrl('coordinatesUrl')">
             Copy

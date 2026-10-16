@@ -97,7 +97,7 @@ def upload_result_image(path, **kwargs):
 # Authentication
 # Username, password and API token come from (first match wins):
 #   1. environment variables API_USERNAME, API_PASSWORD, API_TOKEN
-#      → used when deployed (Hugging Face "Secrets"), so they are never in the public code
+#      → used when deployed (Render "Environment Variables"), so they are never in the public code
 #   2. credentials.json → used when running locally, e.g.
 #      { "username": "admin", "password": "admin", "token": "sk_..." }
 # The same token must be in Frontend/.env (or Vercel settings) as VITE_ML_TOKEN.
