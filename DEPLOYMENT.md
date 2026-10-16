@@ -2,14 +2,16 @@
 
 The backend goes on **Render** and the frontend on **Vercel**. Both are free and deploy straight from GitHub.
 
+**Deployed:** website https://pixel-pipers-sepia.vercel.app · backend https://pixel-pipers.onrender.com
+
 ```
 Anyone's phone / laptop
         │
         ▼
-https://pixel-pipers.vercel.app             ← Frontend (Vercel, builds Frontend/ from GitHub)
+https://pixel-pipers-sepia.vercel.app       ← Frontend (Vercel, builds Frontend/ from GitHub)
         │  POST /frontend  (image + token)
         ▼
-https://pixel-pipers-api.onrender.com       ← Backend (Render, builds Backend/Dockerfile from GitHub)
+https://pixel-pipers.onrender.com           ← Backend (Render, builds Backend/Dockerfile from GitHub)
 ```
 
 Code: https://github.com/Pawanjangid4424/Pixel_pipers. Every `git push` redeploys both automatically.

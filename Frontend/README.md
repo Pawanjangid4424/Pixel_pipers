@@ -1,5 +1,7 @@
 # Pixel Pipers – Frontend
 
+Live: **https://pixel-pipers-sepia.vercel.app**. It is hosted on Vercel and auto-deploys on every push to `main`.
+
 React + TypeScript website for Pixel Pipers, built with Vite, Tailwind CSS, Redux Toolkit and React Router.
 
 ## Run

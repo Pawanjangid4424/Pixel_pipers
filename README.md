@@ -3,6 +3,18 @@
 Count pipes in a photo automatically. You upload an image of a pipe bundle, a YOLO model finds
 every pipe end, and the site shows the total count with a dot or a number drawn on each pipe.
 
+## 🌐 Live demo
+
+| | Link |
+|---|---|
+| **Website** | **https://pixel-pipers-sepia.vercel.app** |
+| Backend API | https://pixel-pipers.onrender.com |
+| API documentation | https://pixel-pipers.onrender.com/api-doc |
+| Source code | https://github.com/Pawanjangid4424/Pixel_pipers |
+
+> The backend runs on Render's free plan: it sleeps after 15 min without visitors.
+> The first image after that can take 1–3 minutes. Open the site a few minutes before a demo.
+
 ## Project structure
 
 ```

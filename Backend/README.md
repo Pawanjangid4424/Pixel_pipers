@@ -11,6 +11,8 @@ pinned: false
 
 # Pixel Pipers – Backend
 
+Live: **https://pixel-pipers.onrender.com** (docs: [/api-doc](https://pixel-pipers.onrender.com/api-doc)). It is hosted on Render (free plan) and auto-deploys on every push to `main`.
+
 Flask API that counts pipes in an image with a trained YOLO model (`PIPE_model/best.pt`).
 All code is in [`PIPE_model/app.py`](PIPE_model/app.py).
 
