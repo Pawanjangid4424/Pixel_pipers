@@ -78,9 +78,9 @@ docker build -t pixel-pipers-backend .
 docker run -p 7860:7860 -e API_TOKEN=sk_your_token -e API_USERNAME=admin -e API_PASSWORD=secret pixel-pipers-backend
 ```
 
-Inside Docker the app runs with gunicorn on port 7860, which Hugging Face Spaces expects.
+Inside Docker the app runs with gunicorn (1 worker, fits 512 MB) on `$PORT`, default 7860.
 The token comes from environment variables, so `credentials.json` is not copied into the image.
-To deploy on Hugging Face, see `../DEPLOYMENT.md` and run `make_hf_upload.ps1`.
+To deploy (Render + Vercel), see `../DEPLOYMENT.md`.
 `Caddyfile` / `Dockerfile.caddy` were used to add HTTPS in the old Azure deployment.
 
 ## Other files

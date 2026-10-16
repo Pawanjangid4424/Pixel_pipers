@@ -22,3 +22,6 @@ _unused_files/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Live-site secrets (made during deployment) – never upload
+DEPLOY_SECRETS.txt

@@ -48,6 +48,9 @@ COPY --chown=user ./PIPE_model /code/
 
 EXPOSE 7860
 
-# 2 workers (each loads the model once). --timeout 120 because the first prediction
-# on a cold CPU can take longer than gunicorn's default 30 s.
-CMD ["sh", "-c", "gunicorn -w 2 --timeout 120 -b 0.0.0.0:${PORT:-7860} wsgi:app"]
+# WORKERS (default 1): each worker loads its own copy of the model (~440 MB in use),
+#   so 1 worker fits free 512 MB hosts like Render. Use 2+ on bigger servers.
+# GUNICORN_TIMEOUT (default 300 s): free hosts have very slow CPUs, so loading the model
+#   and the first prediction can take much longer than gunicorn's default 30 s.
+# PORT: Render/Hugging Face/Azure set this automatically.
+CMD ["sh", "-c", "gunicorn -w ${WORKERS:-1} --timeout ${GUNICORN_TIMEOUT:-300} -b 0.0.0.0:${PORT:-7860} wsgi:app"]

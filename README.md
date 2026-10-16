@@ -33,8 +33,8 @@ Pixel piper complete/
 │       └── train_model.py    experimental training script (not used)
 │
 ├── API-Docs/                 stand-alone copy of the API documentation (open index.html)
-├── DEPLOYMENT.md             how to put it online (Hugging Face + Vercel)  ← step by step
-├── hf_upload/                created by Backend/make_hf_upload.ps1 – files to upload to Hugging Face
+├── DEPLOYMENT.md             how to put it online (Render + Vercel)  ← step by step
+├── hf_upload/                created by Backend/make_hf_upload.ps1 (only for paid Hugging Face hosting)
 └── _unused_files/            files removed from the project – check and delete this folder
 ```
 

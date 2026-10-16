@@ -1,138 +1,98 @@
 # Deploying Pixel Pipers
 
-The backend goes on **Hugging Face Spaces** and the frontend on **Vercel**. Both are free and need no credit card.
+The backend goes on **Render** and the frontend on **Vercel**. Both are free and deploy straight from GitHub.
 
 ```
 Anyone's phone / laptop
         │
         ▼
-https://pixel-pipers.vercel.app            ← Frontend (Vercel, built from GitHub)
+https://pixel-pipers.vercel.app             ← Frontend (Vercel, builds Frontend/ from GitHub)
         │  POST /frontend  (image + token)
         ▼
-https://<username>-pixel-pipers.hf.space   ← Backend (Hugging Face, Docker)
+https://pixel-pipers-api.onrender.com       ← Backend (Render, builds Backend/Dockerfile from GitHub)
 ```
+
+Code: https://github.com/Pawanjangid4424/Pixel_pipers. Every `git push` redeploys both automatically.
 
 Do the steps **in this order**. The frontend needs the backend's URL.
 
----
-
-## Step 0 – Make a new secret token (2 min)
-
-The old token is visible in the code, so create a fresh one for the live site.
-Run this in a terminal and copy the output:
-
-```powershell
-python -c "import secrets; print('sk_' + secrets.token_urlsafe(24))"
-```
-
-Also choose a username and password for the `/login` route. Keep all three in a notepad; you will need them in Steps 2 and 3.
+> **About speed (free plan):** Render's free server has a very small CPU (0.1) and 512 MB RAM.
+> Tested with the same limits: the first image after the server wakes up takes about 2–3 min,
+> and later images about 1–1.5 min. The server sleeps after 15 min without visitors and takes
+> 2–4 min to wake up. Fine for a demo; open the site a few minutes before showing it.
+> For fast results, use **Azure for Students** (see the end of this file).
 
 ---
 
-## Step 1 – Upload the code to GitHub (10 min)
+## Step 0 – Secrets (already done)
 
-1. Create an account on **https://github.com** (skip this if you already have one).
-2. Click **+** (top right), then **New repository**.
-   - Name: `pixel-pipers`
-   - Public
-   - **Do NOT** tick "Add a README", "Add .gitignore" or "license". The project already has them.
-   - Click **Create repository**.
-3. Open a terminal in the project folder (`Pixel piper complete`) and run:
-
-   ```powershell
-   # one-time: tell git who you are (use your GitHub name + email)
-   git config --global user.name "Your Name"
-   git config --global user.email "you@example.com"
-
-   git add .
-   git commit -m "Pixel Pipers: frontend, backend, API docs"
-   git remote add origin https://github.com/<your-username>/pixel-pipers.git
-   git push -u origin main
-   ```
-
-   The first push opens a browser window to log in to GitHub.
-
-> **Don't use GitHub's "upload files" button in the browser.** It ignores `.gitignore` and
-> would upload `node_modules`, `.env` and `credentials.json`.
-> `.gitignore` already keeps these out: `Frontend/.env`, `credentials.json`, `node_modules`,
-> `_unused_files`, `hf_upload` and the `runs/` temp folder.
+The live-site secrets were generated and saved in **`DEPLOY_SECRETS.txt`** in the project folder.
+That file is in `.gitignore`, so it is never uploaded. Open it; you need its values in Steps 1 and 2.
 
 ---
 
-## Step 2 – Backend on Hugging Face Spaces (15–20 min)
+## Step 1 – Backend on Render (15 min + build time)
 
-### 2.1 Create the Space
+1. Go to **https://render.com**, click **Get Started**, then **GitHub**, and log in with your GitHub account.
+2. Click **+ New**, then **Web Service**.
+3. Under **Git Provider**, choose **GitHub**. Allow Render to access your repositories,
+   or only `Pixel_pipers`, then select **`Pawanjangid4424/Pixel_pipers`** and click **Connect**.
+4. Fill in the form:
 
-1. Create an account on **https://huggingface.co**.
-2. Click your profile picture, then **New Space**.
-   - Space name: `pixel-pipers`
-   - SDK: **Docker**, then **Blank**
-   - Hardware: **CPU basic (free)**
-   - Visibility: **Public** (it must be public so the website can call it)
-   - Click **Create Space**.
+   | Field | Value |
+   |---|---|
+   | Name | `pixel-pipers-api` (this becomes the URL) |
+   | Language | **Docker** |
+   | Branch | `main` |
+   | Region | **Singapore** (closest to India) |
+   | **Root Directory** | **`Backend`** ← important |
+   | Dockerfile Path | `./Dockerfile` (default) |
+   | Instance Type | **Free** |
 
-### 2.2 Add the secrets (before uploading)
+5. Under **Environment Variables**, click **Add Environment Variable** three times and copy the values
+   from `DEPLOY_SECRETS.txt`:
 
-In the Space, go to **Settings**, then **Variables and secrets**, then **New secret**. Add these three:
+   | Key | Value |
+   |---|---|
+   | `API_TOKEN` | value of API_TOKEN |
+   | `API_USERNAME` | `admin` |
+   | `API_PASSWORD` | value of API_PASSWORD |
 
-| Name | Value |
-|---|---|
-| `API_TOKEN` | the token from Step 0 |
-| `API_USERNAME` | your username from Step 0 |
-| `API_PASSWORD` | your password from Step 0 |
+6. Click **Deploy Web Service**.
+7. Watch the **Logs**. The first build takes about **10–15 minutes** (it installs PyTorch). When you see
+   `Listening at: http://0.0.0.0:10000` and the status turns **Live**, the backend is running.
+8. Copy your URL from the top of the page, e.g. `https://pixel-pipers-api.onrender.com`.
+   Test it by opening **`<your URL>/api-doc`**. You should see the API documentation page.
 
-The values are hidden from visitors. `app.py` reads them instead of `credentials.json`.
-
-### 2.3 Prepare and upload the files
-
-1. In the `Backend` folder, run:
-
-   ```powershell
-   powershell -ExecutionPolicy Bypass -File .\make_hf_upload.ps1
-   ```
-
-   This creates the folder `Pixel piper complete\hf_upload` with **only** the files the Space needs
-   (no `credentials.json`, no old models).
-2. In the Space, open the **Files** tab, then **+ Contribute**, then **Upload files**.
-3. Open the `hf_upload` folder in Explorer. Select **everything inside it** (`Dockerfile`, `.dockerignore`,
-   `README.md` and the `PIPE_model` folder) and drag it into the browser.
-4. Click **Commit changes to main**.
-
-### 2.4 Wait for the build
-
-- Open the **Logs** tab and watch the build. The first build takes about **10 minutes** (it installs PyTorch).
-- When the status at the top turns **Running**, the backend is live.
-- Your backend URL is `https://<your-username>-pixel-pipers.hf.space`.
-  To check it, open the **⋮** menu, then **Embed this Space**, then **Direct URL**.
-- Test it: open `https://<your-username>-pixel-pipers.hf.space/api-doc` in the browser.
-  You should see the API documentation page.
+> Render may ask for card details for the free plan. It is free and does not charge you,
+> but if you don't want to add a card, use Azure for Students instead (see the end of this file).
 
 ---
 
-## Step 3 – Frontend on Vercel (5 min)
+## Step 2 – Frontend on Vercel (5 min)
 
-1. Go to **https://vercel.com** and choose **Sign up**, then **Continue with GitHub**.
-2. Click **Add New…**, then **Project**, then **Import** next to the `pixel-pipers` repository.
+1. Go to **https://vercel.com**, click **Sign up**, then **Continue with GitHub**.
+2. Click **Add New…**, then **Project**, then **Import** next to **`Pixel_pipers`**.
 3. Settings:
    - **Root Directory:** click **Edit** and choose **`Frontend`** ← important
    - **Framework Preset:** Vite (selected automatically)
-   - Build command / output: leave the defaults (`npm run build`, `dist`)
-   - **Environment Variables:** add both of these:
+   - Build command / output: leave the defaults
+   - **Environment Variables:**
 
      | Key | Value |
      |---|---|
-     | `VITE_SERVER_URL` | `https://<your-username>-pixel-pipers.hf.space` (no `/` at the end) |
-     | `VITE_ML_TOKEN` | the token from Step 0 (same as `API_TOKEN`) |
+     | `VITE_SERVER_URL` | your Render URL, e.g. `https://pixel-pipers-api.onrender.com` (no `/` at the end) |
+     | `VITE_ML_TOKEN` | value of API_TOKEN from `DEPLOY_SECRETS.txt` |
 
 4. Click **Deploy**. After about 1 minute you get your link, e.g. `https://pixel-pipers.vercel.app`.
 
 ---
 
-## Step 4 – Test
+## Step 3 – Test
 
-1. Open the Vercel link **on your phone**.
-2. Upload a pipe photo and press **Send**. You should get the count and the marked image.
-3. If the Space was sleeping, the first request can take about 1 minute. After that it's fast.
+1. Open `<Render URL>/api-doc` first and wait until it loads. This wakes the backend up.
+2. Open the Vercel link **on your phone**, upload a pipe photo and press **Send**.
+3. Wait for the spinner (1–3 min on the free plan). You should get the count and the marked image.
 
 ---
 
@@ -140,9 +100,8 @@ The values are hidden from visitors. `app.py` reads them instead of `credentials
 
 | What changed | What to do |
 |---|---|
-| Frontend code | `git add .`, `git commit -m "..."`, `git push`. Vercel redeploys automatically. |
-| Backend code | push to GitHub too, then run `make_hf_upload.ps1` again and upload the changed files to the Space. It rebuilds automatically. |
-| Token | change `API_TOKEN` on Hugging Face **and** `VITE_ML_TOKEN` on Vercel, then on Vercel open **Deployments**, then **⋮**, then **Redeploy**. Vercel only reads env variables while building. |
+| Any code | `git add .`, `git commit -m "..."`, `git push`. Render and Vercel both redeploy automatically. |
+| Token | change `API_TOKEN` on Render **and** `VITE_ML_TOKEN` on Vercel, then on Vercel open **Deployments**, then **⋮**, then **Redeploy**. Vercel only reads env variables while building. |
 
 ---
 
@@ -151,13 +110,30 @@ The values are hidden from visitors. `app.py` reads them instead of `credentials
 | Problem | Cause / fix |
 |---|---|
 | Website says "Error uploading image" | Check that `VITE_SERVER_URL` on Vercel is right, has no `/` at the end, and starts with `https://`. Redeploy after changing it. |
-| Request returns **401** | `VITE_ML_TOKEN` (Vercel) and `API_TOKEN` (Hugging Face) are not the same. |
-| First request very slow | The Space was asleep (it sleeps after about 48 h with no visitors). Wait about 1 minute. |
-| Space shows **Build error** | Open the **Logs** tab. Check that `Dockerfile` and `README.md` are at the **top level** of the Space, not inside a folder. |
-| Space shows **Runtime error: No credentials found** | The `API_TOKEN` secret is missing (Step 2.2). Add it, then click **Restart Space** in Settings. |
+| Request returns **401** | `VITE_ML_TOKEN` (Vercel) and `API_TOKEN` (Render) are not the same. |
+| Spinner runs for minutes | Normal on the free plan, especially right after the server wakes up. |
+| Render build fails | Open **Logs**. Check that Root Directory is `Backend`. |
+| Render log: **No credentials found** | `API_TOKEN` env variable is missing. Add it under **Environment**; Render restarts automatically. |
+| Render log: **Out of memory** | Make sure there is no `WORKERS` variable set above 1 on the free plan. |
 | Page refresh on Vercel shows 404 | `Frontend/vercel.json` handles this. Make sure Root Directory is `Frontend`. |
 
-## Test the backend image on your own PC (optional, needs Docker Desktop)
+---
+
+## Faster option: Azure for Students (free $100 credit, no card, needs a student email)
+
+The same Docker image runs on Azure, which has a much faster CPU.
+
+1. Sign up at https://azure.microsoft.com/free/students with your college email.
+2. In the Azure Portal, create a **Container App** (or **Web App for Containers**) from the GitHub repo's
+   `Backend/Dockerfile`. Set the same 3 environment variables, set `PORT=7860`, and you can set `WORKERS=2`.
+3. Put the Azure URL into Vercel's `VITE_SERVER_URL` and redeploy.
+
+## Paid option: Hugging Face Spaces
+
+Docker Spaces need a **PRO** subscription (about $9/month). `Backend/make_hf_upload.ps1` builds the upload
+folder for it, and `Backend/README.md` already has the Space settings block at the top.
+
+## Test the backend image on your own PC (optional, Docker Desktop)
 
 ```powershell
 cd Backend
@@ -166,4 +142,4 @@ docker run -p 7860:7860 -e API_TOKEN=sk_test -e API_USERNAME=admin -e API_PASSWO
 # open http://localhost:7860/api-doc
 ```
 
-If it works here, it works on Hugging Face. They build the same Dockerfile.
+To test with the same limits as Render's free plan, add `--memory=512m --cpus=0.1`.
