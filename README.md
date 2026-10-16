@@ -46,12 +46,8 @@ Pixel piper complete/
 │
 ├── API-Docs/                 stand-alone copy of the API documentation (open index.html)
 ├── DEPLOYMENT.md             how to put it online (Render + Vercel)  ← step by step
-├── hf_upload/                created by Backend/make_hf_upload.ps1 (only for paid Hugging Face hosting)
-└── _unused_files/            files removed from the project – check and delete this folder
+
 ```
-
-`hf_upload/`, `_unused_files/`, `Frontend/.env` and `credentials.json` are in `.gitignore`, so they never go to GitHub.
-
 ## How it works
 
 ```
