@@ -1,0 +1,24 @@
+# Files that must NOT go to GitHub
+
+# --- Secrets ---
+# Frontend settings (put the same values in Vercel → Settings → Environment Variables)
+Frontend/.env
+# Backend login + token (use Hugging Face Secrets when deployed)
+Backend/PIPE_model/credentials.json
+
+# --- Installed packages / build output (re-created with npm install / npm run build) ---
+node_modules/
+dist/
+
+# --- Temporary / generated ---
+Backend/PIPE_model/runs/
+__pycache__/
+*.pyc
+hf_upload/
+_unused_files/
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

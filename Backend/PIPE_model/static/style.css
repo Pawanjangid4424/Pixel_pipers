@@ -1,0 +1,194 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /* font-family: Arial, sans-serif; */
+  font-family: "Roboto", Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #51829b;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+code {
+  background-color: #f8edff;
+  padding: 3px 10px;
+  margin: 10px 0;
+  font-size: 1rem;
+  font-weight: 100;
+  font-family: monospace;
+  border-radius: 2px;
+}
+
+img {
+  max-width: 800px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+img:hover {
+  cursor: pointer;
+}
+
+button {
+  background-color: #49a6b3;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 5px;
+  color: black;
+  font-size:small;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: gray;
+}
+
+.api-template {
+  max-width: 850px;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.json-snippet {
+  background-color: #f8f8f8;
+  padding: 0 20px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+}
+
+.key {
+  color: red;
+}
+
+.value {
+  color: black;
+}
+
+.request-snippet {
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.request-snippet p {
+  margin: 0;
+}
+
+.token {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.clipboard {
+  display: none;
+  position: fixed;
+  top: 40px;
+  right: 20px;
+  background-color: antiquewhite;
+  padding: 5px;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+
+#hexCode {
+  font-size: medium;
+  font-weight: bold;
+  letter-spacing: 2px; /* Adjust the value as needed */
+}
+
+.color-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-picker .copy-button {
+  display: none;
+}
+#fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#fullscreen img {
+  max-width: 100%;
+  max-height: 100%;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+  h1 {
+    font-size: large;
+  }
+  h2 {
+    font-size: larger;
+  }
+  p {
+    font-size: 1rem;
+  }
+  code {
+    font-size: small;
+  }
+  body {
+    background-color: lightblue;
+  }
+  pre {
+    font-size: 0.6rem;
+  }
+  img {
+    max-width: 320px;
+  }
+  #frontendUrl,
+  #coordinatesUrl {
+    font-size: 0.5rem;
+  }
+  #baseUrl {
+    font-size: 0.64rem;
+  }
+  #Bearer-Token {
+    font-size: 0.8rem;
+  }
+  .token {
+    display: inline;
+  }
+}

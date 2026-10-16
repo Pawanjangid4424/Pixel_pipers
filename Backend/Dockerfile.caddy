@@ -1,0 +1,7 @@
+# Docker image for the Caddy HTTPS proxy (uses ./Caddyfile)
+FROM caddy:2-alpine
+
+EXPOSE 80
+EXPOSE 443
+
+COPY Caddyfile /etc/caddy/Caddyfile

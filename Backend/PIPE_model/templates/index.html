@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API DOCUMENTATION</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+ <body>
+    <div id="fullscreen"></div>
+    <div class="clipboard" id="clipboardMessage">Copied to clipboard</div>
+
+    <div class="api-template">
+      <h1>PIXEL PIPERS API DOCUMENTATION</h1>
+
+      <h2>Description</h2>
+      <p>
+        There are two API endpoints for getting results:
+        <code>/frontend</code> and <code>/coordinates</code>
+      </p>
+
+      <h2>Base URL</h2>
+      <p>The base URL for all API requests is:</p>
+      <code id="baseUrl"
+        >https://darkneuxmodel.westindia.azurecontainer.io</code
+      >
+      <div>
+        <h2>Endpoints</h2>
+        <code>POST /frontend</code>
+        <p>Returns the count of objects and the image URL.</p>
+        <h2>Authorization</h2>
+        <div class="token">
+          <p>
+            <code>Bearer-Token</code>
+            <span id="Bearer-Token"> add token from credentials.json file </span>
+          </p>
+          <button class="copy-button" onclick="copyUrl('Bearer-Token')">
+            Copy
+          </button>
+        </div>
+
+        <h2>Body</h2>
+        <p><code>uploadImage</code> : upload image file</p>
+        <p>
+          <a href="#confidence_threshold">
+            <code> confidence_threshold </code>
+          </a>
+          : 0.1 to 0.9 can be set but 0.6 is ideal
+        </p>
+        <p>
+          <a href="#key">
+            <code> key </code>
+          </a>
+          : 1 for numbers or 0 for dots
+        </p>
+        <p><code>font_scale</code>: 0.5 to 1</p>
+        <p>
+          <a href="#color"><code>color</code>: choose color from below</a>
+        </p>
+        <div class="color-picker">
+          <input type="color" id="colorInput" />
+          <span id="hexCode"></span>
+          <button
+            class="copy-button"
+            onclick="copyUrl('hexCode')"
+            id="copyButton"
+          >
+            Copy
+          </button>
+        </div>
+
+        <h2>Response</h2>
+        <p>Returns a JSON object with the following properties:</p>
+        <p><code>count</code> : The total number of Pipes in the image.</p>
+        <p><code>image_url</code> : Result Image Url cloudinary image url</p>
+        <h1>Example :</h1>
+        <h3>Request :</h3>
+        <div class="request-snippet">
+          <p id="frontendUrl">
+            https://darkneuxmodel.westindia.azurecontainer.io/frontend
+          </p>
+          <button class="copy-button" onclick="copyUrl('frontendUrl')">
+            Copy
+          </button>
+        </div>
+        <h3>Response :</h3>
+        <div class="json-snippet">
+          <pre>
+{
+  <span class="key">"count"</span>: <span class="value">"58"</span>,
+  <span class="key">"image_url"</span>: <span class="value">"https://pixelpipers.jpg"</span>
+}
+          </pre>
+        </div>
+      </div>
+      <div>
+        <h2>Endpoints</h2>
+        <code>POST /coordinates</code>
+        <p>Returns the count of objects and coordinates of image</p>
+        <h2>Authorization</h2>
+        <div class="token">
+          <p>
+            <code>Bearer Token</code> :
+            <span id="Bearer-Token"> add token from credentials.json file </span>
+          </p>
+          <button class="copy-button" onclick="copyUrl('Bearer-Token')">
+            Copy
+          </button>
+        </div>
+
+        <h2>Body</h2>
+        <p><code>uploadImage</code> : upload image file</p>
+        <p>
+          <a href="#confidence_threshold">
+            <code> confidence_threshold </code>
+          </a>
+          : 0.1 to 0.9 can be set but 0.6 is ideal
+        </p>
+        <p>
+          <a href="#key">
+            <code> key </code>
+          </a>
+          : 1 for numbers or 0 for dots
+        </p>
+
+        <h2>Response</h2>
+        <p>Returns a JSON object with the following properties:</p>
+        <p><code>count</code> : The total number of Pipes in the image.</p>
+        <p><code>image_url</code> : Result Image Url cloudinary image url</p>
+        <h2>Example</h2>
+        <h3>Request :</h3>
+        <div class="request-snippet">
+          <p id="coordinatesUrl">
+            http://darkneuxmodel.westindia.azurecontainer.io/coordinates
+          </p>
+          <button class="copy-button" onclick="copyUrl('coordinatesUrl')">
+            Copy
+          </button>
+        </div>
+        <h3>Response :</h3>
+        <div class="json-snippet">
+          <pre>
+{
+  <span class="key">"count"</span>: <span class="value">"58"</span>,
+  <span class="key">"coordinates"</span>: <span class="value">[
+      "0 0.776897 0.640761 0.0930571 0.108913",
+      "0 0.408947 0.335775 0.0775557 0.106726",
+      "0 0.623222 0.695965 0.0854069 0.102417",
+      "0 0.688448 0.403384 0.09075 0.115307",
+      "0 0.579747 0.58271 0.0807246 0.106618",
+      "0 0.371355 0.779873 0.0669557 0.0905838",
+      "0 0.675918 0.611262 0.0849769 0.106964",
+      "0 0.368684 0.420772 0.0727924 0.103304",
+      "0 0.449695 0.242297 0.0784449 0.10953"
+  ]</span>
+}
+          </pre>
+        </div>
+      </div>
+      <div>
+        <h1>Postman</h1>
+        <h2>Request Body</h2>
+        <img
+          src="https://res.cloudinary.com/dnpji7f84/image/upload/v1709569022/qtxo9apnuawlkddqfjwb.png"
+          alt="example_image"
+          onclick="openFullscreen(this.src)"
+        />
+        <h2>Headers</h2>
+        <img
+          src="https://res.cloudinary.com/dnpji7f84/image/upload/v1709569022/obdmgwshkq4f3bryiidy.png"
+          alt="example_image"
+          onclick="openFullscreen(this.src)"
+        />
+      </div>
+      <div>
+        <h3 id="confidence_threshold">Confidence Threshold</h3>
+        <p>
+          The confidence_threshold indicates how confident the model is while
+          detecting the number of pipes. The range can be set from 0.1 to 0.9,
+          but the ideal value is typically 0.6 or 0.5.
+        </p>
+        <h3 id="key">key</h3>
+        <p>
+          In the result image, there are two options showing result numbers and
+          dots. "1" is set for numbers and "0" is for dots.
+        </p>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+  </body>
+</html>

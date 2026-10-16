@@ -1,0 +1,4 @@
+# Caddy reverse proxy (HTTPS) for the old Azure deployment -> forwards to the backend on :5000
+darkneuxmodel.westindia.azurecontainer.io {
+    reverse_proxy localhost:5000
+}

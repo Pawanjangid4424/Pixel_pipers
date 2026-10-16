@@ -1,0 +1,21 @@
+# Files NOT copied into the Docker image (keeps it small and keeps secrets out)
+
+# Secrets – give them to the container as environment variables instead
+PIPE_model/credentials.json
+
+# Old model versions (~41 MB) – the app only uses best.pt
+PIPE_model/old_models/
+
+# Temporary YOLO output and Python cache
+PIPE_model/runs/
+**/__pycache__/
+**/*.pyc
+
+# Stand-alone scripts that need a webcam / video / GUI (not used by the API)
+PIPE_model/web_cam.py
+PIPE_model/video_yolo.py
+PIPE_model/train_model.py
+
+# Old Caddy proxy setup
+Caddyfile
+Dockerfile.caddy

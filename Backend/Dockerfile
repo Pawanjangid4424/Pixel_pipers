@@ -1,0 +1,53 @@
+# ---------------------------------------------------------------------------
+# Backend Docker image: Python + YOLO + Flask, served with gunicorn.
+#
+# Works on Hugging Face Spaces (Docker) and on any normal Docker host.
+#
+#   Build:  docker build -t pixel-pipers-backend .
+#   Run:    docker run -p 7860:7860 -e API_TOKEN=sk_... pixel-pipers-backend
+#   Open:   http://localhost:7860/api-doc
+#
+# Settings (environment variables):
+#   API_TOKEN, API_USERNAME, API_PASSWORD  – login + token (see app.py)
+#   PORT                                   – port to listen on (default 7860 = Hugging Face)
+#   CLOUDINARY_*                           – optional image hosting (see app.py)
+# ---------------------------------------------------------------------------
+
+# Same Python version the app was tested with locally
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    # Ultralytics/matplotlib want a writable settings folder
+    YOLO_CONFIG_DIR=/tmp/Ultralytics \
+    MPLCONFIGDIR=/tmp/matplotlib
+
+# System libraries OpenCV needs.
+# (The old "libgl1-mesa-glx" package no longer exists in current Debian images,
+#  which made the old Dockerfile fail to build.)
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# CPU-only PyTorch: ~4x smaller than the default CUDA build, and free servers have no GPU anyway
+RUN pip install --no-cache-dir torch==2.5.1 torchvision==0.20.1 \
+    --index-url https://download.pytorch.org/whl/cpu
+
+# YOLO + Flask packages (pinned versions, see requirements.txt)
+COPY ./PIPE_model/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Hugging Face runs the container as user 1000 – create it so the app can write
+# temp images and YOLO output inside /code
+RUN useradd -m -u 1000 user
+USER user
+WORKDIR /code
+
+# App code + model (old_models, runs, credentials.json are excluded by .dockerignore)
+COPY --chown=user ./PIPE_model /code/
+
+EXPOSE 7860
+
+# 2 workers (each loads the model once). --timeout 120 because the first prediction
+# on a cold CPU can take longer than gunicorn's default 30 s.
+CMD ["sh", "-c", "gunicorn -w 2 --timeout 120 -b 0.0.0.0:${PORT:-7860} wsgi:app"]

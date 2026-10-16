@@ -1,0 +1,6 @@
+Flask==3.0.2
+Flask-Cors==4.0.0
+cloudinary==1.37.0
+gunicorn==21.2.0
+# YOLO library – the version the app was tested with (newer/older versions changed arguments)
+ultralytics==8.3.55
